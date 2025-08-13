@@ -1,6 +1,5 @@
 .mainDiv, .rowDiv{
     display: flex;
-    gap: 10px;
 }
 
 .mainDiv{
@@ -13,6 +12,8 @@
     height: 10vw;
     position: relative;
     cursor: pointer;
+    padding: 0;
+    margin: 10px;
 }
 
 .front, .back {

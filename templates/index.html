@@ -7,19 +7,22 @@
 </head>
 <body class="index">
     <div class="mainDiv">
-     {% for row in board %}
-        <div class="rowDiv">
-        {% for element in row %}
-            <div class="card" onclick="
-                this.classList.add('flipped');
-                setTimeout(() => this.classList.remove('flipped'), 2000);
-            ">
-                <div class="front"></div>
-                <div class="back">{{ element }}</div>
-            </div>
-        {% endfor %}
-        </div>
-    {% endfor %}
+        <form id="form">
+            <input type="hidden" name="clicked_card" id="clicked_card_input" value="">
+            {% for row in board %}
+                <div class="rowDiv">
+                {% for element in row %}
+                    <div class="card {% if element.isopen %} flipped {% endif %}" onclick="
+                        document.getElementById('clicked_card_input').value = '{{ element.id }}';
+                        document.getElementById('form').submit();
+                    ">
+                        <div class="front"></div>
+                        <div class="back">{{ element.text }}</div>
+                </div>
+                {% endfor %}
+                </div>
+            {% endfor %}
+        </form>
     </div>
 </body>
 </html>
