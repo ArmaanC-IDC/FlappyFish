@@ -13,8 +13,11 @@
                 <div class="rowDiv">
                 {% for element in row %}
                     <div class="card {% if element.isopen %} flipped {% endif %}" onclick="
-                        document.getElementById('clicked_card_input').value = '{{ element.id }}';
-                        document.getElementById('form').submit();
+                        this.classList.add('flipped');
+                        setTimeout(() => {
+                            document.getElementById('clicked_card_input').value = '{{ element.id }}';
+                            document.getElementById('form').submit();
+                        }, 500)
                     ">
                         <div class="front"></div>
                         <div class="back">{{ element.text }}</div>

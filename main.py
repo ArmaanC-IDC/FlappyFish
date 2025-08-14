@@ -4,6 +4,7 @@ flask --app (name of your project) run --debug
 """
 
 from flask import Flask, render_template, request # imports
+import time
 
 app = Flask(__name__) # create Flask app
 
@@ -14,12 +15,8 @@ class Card:
         self.isopen = isopen
 
 board = [
-    [Card("0_0", "🌟"), Card("0_1", "🍩"), Card("0_2", "🐶"), Card("0_3", "🍎"), Card("0_4", "🎲"), Card("0_5", "🎵")],
-    [Card("1_0", "🚗"), Card("1_1", "🎁"), Card("1_2", "🦄"), Card("1_3", "🍕"), Card("1_4", "💎"), Card("1_5", "🍀")],
-    [Card("2_0", "📚"), Card("2_1", "🍎"), Card("2_2", "🍕"), Card("2_3", "🚗"), Card("2_4", "🌟"), Card("2_5", "🌹")],
-    [Card("3_0", "💎"), Card("3_1", "🎲"), Card("3_2", "🎵"), Card("3_3", "🐶"), Card("3_4", "🦄"), Card("3_5", "🍀")],
-    [Card("4_0", "🎁"), Card("4_1", "🌹"), Card("4_2", "🚀"), Card("4_3", "🎵"), Card("4_4", "😀"), Card("4_5", "😀")],
-    [Card("5_0", "🚀"), Card("5_1", "📚"), Card("5_2", "⚽"), Card("5_3", "🍩"), Card("5_4", "⚽"), Card("5_5", "🌈")],
+    [Card("0_0", "🌟"), Card("0_1", "🍩")],
+    [Card("1_0", "🍩"), Card("1_1", "🌟")],
 ]
 
 #Keep track of currently flipped cards
@@ -48,11 +45,22 @@ def main():
         if len(open_cards) == 2:
             card1, card2 = open_cards
             if card1.text != card2.text:
+                time.sleep(1.5)
 #not match is flip them back
                 card1.isopen = False
                 card2.isopen = False
 #reset  open cards list
             open_cards.clear()
+
+            #check if player won
+            won = True
+            for row in board:
+                for card in row:
+                    if not card.isopen:
+                        won = False
+            
+            if won:
+                return "<h1>YOU WON!</h1>"
 
     return render_template("index.html", board=board)
 
