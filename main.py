@@ -17,14 +17,28 @@ class Card:
 board = [
     [Card("0_0", "🌟"), Card("0_1", "🍩")],
     [Card("1_0", "🍩"), Card("1_1", "🌟")],
+    [Card("0_0", "🌟"), Card("0_1", "🍩")],
+    [Card("1_0", "🍩"), Card("1_1", "🌟")],
+    [Card("0_0", "🌟"), Card("0_1", "🍩")],
+    [Card("1_0", "🍩"), Card("1_1", "🌟")],
 ]
+
+numTurns = 0
 
 #Keep track of currently flipped cards
 open_cards = []
 
 @app.route("/")
 def main():
+    global numTurns
     clicked_card_id = request.args.get("clicked_card", "")
+    reset = request.args.get("reset", "")
+    if (reset=="True"):
+        #reset the board
+        for row in board:
+            for card in row:
+                card.isopen = False
+        numTurns = 0
 
     if clicked_card_id:
         found = False
@@ -43,9 +57,10 @@ def main():
 
 #
         if len(open_cards) == 2:
+            numTurns += 1
             card1, card2 = open_cards
             if card1.text != card2.text:
-                time.sleep(1.5)
+                time.sleep(0.5)
 #not match is flip them back
                 card1.isopen = False
                 card2.isopen = False
@@ -62,7 +77,7 @@ def main():
             if won:
                 return "<h1>YOU WON!</h1>"
 
-    return render_template("index.html", board=board)
+    return render_template("index.html", board=board, numTurns=numTurns)
 
 
 

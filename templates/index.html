@@ -9,6 +9,7 @@
     <div class="mainDiv">
         <form id="form">
             <input type="hidden" name="clicked_card" id="clicked_card_input" value="">
+            <input type="hidden" name="reset" id="reset_input" value="">
             {% for row in board %}
                 <div class="rowDiv">
                 {% for element in row %}
@@ -27,5 +28,15 @@
             {% endfor %}
         </form>
     </div>
+    <div style="flex-grow: 1">
+        <h2 style="text-align: center;">{{ numTurns }}</h2>
+    </div>
+
+    <button onclick="
+        document.getElementById('reset_input').value = 'True';
+        document.getElementById('form').submit();
+    ">
+        RESET
+    </button>
 </body>
 </html>

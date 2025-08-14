@@ -1,9 +1,14 @@
+body{
+    display: flex;
+}
+
 .mainDiv, .rowDiv{
     display: flex;
 }
 
 .mainDiv{
     flex-direction: column;
+    flex-grow: 1;
 }
 
 .card{
