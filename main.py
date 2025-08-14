@@ -22,10 +22,38 @@ board = [
     [Card("5_0", "🚀"), Card("5_1", "📚"), Card("5_2", "⚽"), Card("5_3", "🍩"), Card("5_4", "⚽"), Card("5_5", "🌈")],
 ]
 
+#Keep track of currently flipped cards
+open_cards = []
+
 @app.route("/")
-def main():    
-    if request.method=="GET":
-        print("Clicked Card: " + request.args.get("clicked_card", ""))    
+def main():
+    clicked_card_id = request.args.get("clicked_card", "")
+
+    if clicked_card_id:
+        found = False
+        for row in board:
+            for card in row:
+                if card.id == clicked_card_id:
+#only flip if not open
+                    if not card.isopen:
+                        card.isopen = True
+                        open_cards.append(card)
+                    found = True
+                    break
+            if found:
+#stop outsiide loop
+                break
+
+#
+        if len(open_cards) == 2:
+            card1, card2 = open_cards
+            if card1.text != card2.text:
+#not match is flip them back
+                card1.isopen = False
+                card2.isopen = False
+#reset  open cards list
+            open_cards.clear()
+
     return render_template("index.html", board=board)
 
 
