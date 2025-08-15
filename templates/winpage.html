@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Flappy Fish</title>
+    <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+    <h1>YOU WON!</h1>
+    <form id="form">
+        <input type="hidden" name="reset" id="reset_input" value="">
+        <button onclick="
+            document.getElementById('reset_input').value = 'True';
+            document.getElementById('form').submit();
+        ">RESET</button>
+    </form>
+</body>
+</html>

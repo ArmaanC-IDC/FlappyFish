@@ -5,6 +5,7 @@ flask --app (name of your project) run --debug
 
 from flask import Flask, render_template, request # imports
 import time
+import random
 
 app = Flask(__name__) # create Flask app
 
@@ -14,15 +15,39 @@ class Card:
         self.text = text
         self.isopen = isopen
 
-board = [
-    [Card("0_0", "🌟"), Card("0_1", "🍩"), Card("0_2", "🌟"), Card("0_3", "🍩"), Card("0_4", "🌟")],
-    [Card("1_0", "🌟"), Card("1_1", "🍩"), Card("1_2", "🌟"), Card("1_3", "🍩"), Card("1_4", "🌟")],
-    [Card("2_0", "🌟"), Card("2_1", "🍩"), Card("2_2", "🌟"), Card("2_3", "🍩"), Card("2_4", "🌟")],
-    [Card("3_0", "🌟"), Card("3_1", "🍩"), Card("3_2", "🌟"), Card("3_3", "🍩"), Card("3_4", "🌟")],
-    [Card("4_0", "🌟"), Card("4_1", "🍩"), Card("4_2", "🌟"), Card("4_3", "🍩"), Card("4_4", "🌟")],
-    [Card("5_0", "🌟"), Card("5_1", "🍩"), Card("5_2", "🌟"), Card("5_3", "🍩"), Card("5_4", "🌟")],
+emojis = [
+    "🌊",  # Water Wave
+    "🐠",  # Tropical Fish
+    "🐟",  # Fish
+    "🐬",  # Dolphin
+    "🐳",  # Spouting Whale
+    "🐋",  # Whale
+    "🦈",  # Shark
+    "🐙",  # Octopus
+    "🦀",  # Crab
+    "🦞",  # Lobster
+    "🦐",  # Shrimp
+    "🦑",  # Squid
+    "🐚",  # Shell
+    "🪸",  # Coral
+    "🪼",  # Jellyfish
+    "⚓",  # Anchor
+    "⛵",  # Sailboat
+    "🚤"   # Speedboat
 ]
 
+def create_board():
+    emojis_shuffled = emojis*2
+    random.shuffle(emojis_shuffled)
+    emojis_2d = [emojis_shuffled[i * 6:(i + 1) * 6] for i in range(6)]
+
+    for i in range(len(emojis_2d)):
+        for j in range(len(emojis_2d[i])):
+            emojis_2d[i][j] = Card(str(i)+"_"+str(j), emojis_2d[i][j])
+    
+    return emojis_2d
+
+board = create_board()
 numTurns = 0
 
 #Keep track of currently flipped cards
@@ -30,7 +55,7 @@ open_cards = []
 
 @app.route("/")
 def main():
-    global numTurns
+    global numTurns, board
     clicked_card_id = request.args.get("clicked_card", "")
     reset = request.args.get("reset", "")
     if (reset=="True"):
@@ -38,7 +63,7 @@ def main():
         for row in board:
             for card in row:
                 card.isopen = False
-        numTurns = 0
+        board = create_board()
 
     if clicked_card_id:
         found = False
@@ -75,7 +100,13 @@ def main():
                         won = False
             
             if won:
-                return "<h1>YOU WON!</h1>"
+                return render_template("winpage.html")
+
+    try:
+        if board is None:
+            board = create_board()
+    except:
+        board = create_board()
 
     return render_template("index.html", board=board, numTurns=numTurns)
 
