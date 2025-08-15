@@ -49,6 +49,7 @@ body.index {
     font-weight: bold;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     transition: transform 0.6s;
+    font-size: 50px;
 }
 
 /* Front side */
